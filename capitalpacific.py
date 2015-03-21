@@ -1,28 +1,19 @@
+import pymongo
 from selenium import webdriver
 import smtplib
 import sys
-import re
 import json
 
-#holds known URL's
-oldProperties = []
+from pymongo import MongoClient
+client = MongoClient('localhost', 27017)
 
-#all listing on current page get put into this dict
+db = client.properties
+collection = db['capitalpacific']
+
+fromDB = []
 newProperties = []
 
 driver = webdriver.Firefox()
-
-#Capital Pacific Website
-#Commerical Real Estate
-
-#open text file containing property titles we already know about
-p = re.compile(r'https?:\/\/[^"]+', re.IGNORECASE | re.MULTILINE)
-with(open("properties.txt", "rU")) as f:
-	for line in f:
-		q = re.findall(p, line)
-		oldProperties.extend(q)
-
-#search for new listings
 driver.get("http://cp.capitalpacific.com/Properties")
 
 for property in driver.find_elements_by_css_selector('table.property div.property'):
@@ -41,30 +32,22 @@ for property in driver.find_elements_by_css_selector('table.property div.propert
 
 driver.close()
 
-#find the properties that we already have by cross referencing the
-#marketing URLS
-for x in oldProperties:
-	for item in newProperties:
-		if (item['marketing_package_url'] == x):
-			newProperties.remove(item)
-	
+if collection.count() != 0:
+    for post in collection.find():
+        fromDB.append(post)
 
-#properties now has only the new properties
-#add them to the file
-with open('properties.txt', 'w') as outfile:
-	for item in newProperties:
-		json.dump(item, outfile)
+    for item in newProperties:
+        for post in fromDB[1:]:
+            if item['marketing_package_url'] == post['marketing_package_url']:
+                newProperties.remove(item)
 
 
-#if no new properties found, terminate script
-#else, email properties
-#if no new properties found, terminate script
-#else, email properties
 if len(newProperties) == 0:
+    collection.insert_many(newProperties)
     sys.exit()
-else: 
+else:
     fromaddr = 'ottoliarobert@gmail.com'
-    toaddrs = ['Andrew.Ottolia@marcusmillichap.com']
+    toaddrs = ['ottoliar@onid.oregonstate.edu']
     username = 'ottoliarobert@gmail.com'
     password = '08Acuratl'
 
