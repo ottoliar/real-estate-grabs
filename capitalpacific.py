@@ -52,17 +52,18 @@ listings and then insert them into the DB'''
 if len(newProperties) == 0:
     sys.exit()
 else:
+    with open('passwords.txt') as inFile:
+        password = inFile.read()
     fromaddr = 'ottoliarobert@gmail.com'
     toaddrs = ['andy.ottolia@gmail.com']
     username = 'ottoliarobert@gmail.com'
-    password = ''
 
     server = smtplib.SMTP('smtp.gmail.com:587')
     server.starttls()
     server.login(username, password)
 
     for item in newProperties:
-        fullMessage = "New Listing @ Capital Pacific: " + "\n"
+        fullMessage = "\nNew Listing @ Capital Pacific: " + "\n"
         fullMessage += "Title: " + str(item['title']) + "\n"
         fullMessage += "Location: " + str(item['location']) + "\n"
         fullMessage += "Contact Email: " + str(item['contact']) + "\n"
