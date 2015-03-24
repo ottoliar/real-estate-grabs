@@ -10,7 +10,9 @@ client = MongoClient('localhost', 27017)
 db = client.properties
 collection = db['capitalpacific']
 
-fromDB = []
+#hold old properties imported from DB
+oldProperties = []
+#holds new properties gathered from page
 newProperties = []
 
 driver = webdriver.Firefox()
@@ -32,24 +34,28 @@ for property in driver.find_elements_by_css_selector('table.property div.propert
 
 driver.close()
 
+'''if database not empty, add the old properties,
+then compare against the newly fetched and remove repeats'''
+
 if collection.count() != 0:
     for post in collection.find():
-        fromDB.append(post)
+        oldProperties.append(post)
 
-    for item in newProperties:
-        for post in fromDB[1:]:
-            if item['marketing_package_url'] == post['marketing_package_url']:
-                newProperties.remove(item)
+    for a in oldProperties:
+        for b in newProperties:
+            if a['marketing_package_url'] == b['marketing_package_url']:
+                newProperties.remove(b)
 
+'''if no new listings, exit the program.  Otherwise, email all new 
+listings and then insert them into the DB'''
 
 if len(newProperties) == 0:
-    collection.insert_many(newProperties)
     sys.exit()
 else:
     fromaddr = 'ottoliarobert@gmail.com'
     toaddrs = ['ottoliar@onid.oregonstate.edu']
     username = 'ottoliarobert@gmail.com'
-    password = 'xxxxx'
+    password = '08Acuratl'
 
     server = smtplib.SMTP('smtp.gmail.com:587')
     server.starttls()
@@ -61,6 +67,8 @@ else:
         fullMessage += "Location: " + str(item['location']) + "\n"
         fullMessage += "Contact Email: " + str(item['contact']) + "\n"
         server.sendmail(fromaddr, toaddrs, fullMessage)
+        collection.insert(item)
 
     server.quit()
+
 
