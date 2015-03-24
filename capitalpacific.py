@@ -41,9 +41,9 @@ if collection.count() != 0:
     for post in collection.find():
         oldProperties.append(post)
 
-    for a in oldProperties:
-        for b in newProperties:
-            if a['marketing_package_url'] == b['marketing_package_url']:
+    for oldListing in oldProperties:
+        for newListing in newProperties:
+            if oldListing['marketing_package_url'] == newListing['marketing_package_url']:
                 newProperties.remove(b)
 
 '''if no new listings, exit the program.  Otherwise, email all new 
@@ -55,7 +55,7 @@ else:
     fromaddr = 'ottoliarobert@gmail.com'
     toaddrs = ['andy.ottolia@gmail.com']
     username = 'ottoliarobert@gmail.com'
-    password = 'xxxxxxxxx'
+    password = '08Acuratl'
 
     server = smtplib.SMTP('smtp.gmail.com:587')
     server.starttls()
