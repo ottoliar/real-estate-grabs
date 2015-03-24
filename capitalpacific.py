@@ -44,7 +44,7 @@ if collection.count() != 0:
     for oldListing in oldProperties:
         for newListing in newProperties:
             if oldListing['marketing_package_url'] == newListing['marketing_package_url']:
-                newProperties.remove(b)
+                newProperties.remove(newListing)
 
 '''if no new listings, exit the program.  Otherwise, email all new 
 listings and then insert them into the DB'''
