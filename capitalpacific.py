@@ -55,7 +55,7 @@ else:
     fromaddr = 'ottoliarobert@gmail.com'
     toaddrs = ['andy.ottolia@gmail.com']
     username = 'ottoliarobert@gmail.com'
-    password = 'xxxxxxxxx'
+    password = '08Acuratl'
 
     server = smtplib.SMTP('smtp.gmail.com:587')
     server.starttls()
