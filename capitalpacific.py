@@ -53,7 +53,7 @@ if len(newProperties) == 0:
     sys.exit()
 else:
     fromaddr = 'ottoliarobert@gmail.com'
-    toaddrs = ['ottoliar@onid.oregonstate.edu']
+    toaddrs = ['andy.ottolia@gmail.com']
     username = 'ottoliarobert@gmail.com'
     password = '08Acuratl'
 
