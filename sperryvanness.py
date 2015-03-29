@@ -29,11 +29,14 @@ for property in driver.find_elements_by_class_name('propertyListItem'):
 	title = generalInfo.find_element_by_tag_name('a')
 	location = generalInfo.find_element_by_class_name('propertiesListCityStateZip')
 	email = property.find_element_by_partial_link_text('Email')
+	link = property.find_element_by_partial_link_text(title.text)
 	contact = email.get_attribute('href')
+	url = link.get_attribute('href')
 
 	newProperties.append({
 		'title': title.text,
 		'location': location.text,
+		'url': url,
 		'contact': contact
 		})
 
@@ -63,17 +66,20 @@ else:
 	fromaddr = 'ottoliarobert@gmail.com'
 	toaddrs = ['andy.ottolia@gmail.com']
 	username = 'ottoliarobert@gmail.com'
-
 	server = smtplib.SMTP('smtp.gmail.com:587')
+	server.ehlo()
 	server.starttls()
 	server.login(username, password)
+	subject = "New Listing @ Sperry Van Ness"
 
 	for item in newProperties:
-		fullMessage = "\nNew Listing @ Sperry Van Ness: " + "\n"
-		fullMessage += "Title: " + str(item['title']) + "\n"
-		fullMessage += "Location: " + str(item['location']) + "\n"
-		fullMessage += "Contact Email: " + str(item['contact']) + "\n"
-		server.sendmail(fromaddr, toaddrs, fullMessage)
+		body += "Title: " + str(item['title']) + "\n"
+		body += "Location: " + str(item['location']) + "\n"
+		body += "URL: " + str(item['url']) + "\n"
+		body += "Contact Email: " + str(item['contact']) + "\n"
+        msg = """\From: %s\nTo: %s\nSubject: %s\n\n%s
+        """ % (fromaddr, ", ".join(toaddrs), subject, body)
+        server.sendmail(fromaddr, toaddrs, msg)
 		collection.insert(item)
 
-	server.quit()
+	server.close()
