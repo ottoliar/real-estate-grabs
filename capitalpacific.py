@@ -1,8 +1,8 @@
-import pymongo
 from selenium import webdriver
+from email.mime.text import MIMEText
+import pymongo
 import smtplib
 import sys
-import json
 
 from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
@@ -47,7 +47,7 @@ if collection.count() != 0:
                 newProperties.remove(newListing)
 
 '''if no new listings, exit the program.  Otherwise, email all new 
-listings and then insert them into the DB'''
+listings and then insert them into the database'''
 
 if len(newProperties) == 0:
     sys.exit()
@@ -55,21 +55,23 @@ else:
     with open('passwords.txt') as inFile:
         password = inFile.read()
     fromaddr = 'ottoliarobert@gmail.com'
-    toaddrs = ['andy.ottolia@gmail.com']
+    toaddrs = ['ottoliar@onid.oregonstate.edu']
     username = 'ottoliarobert@gmail.com'
-
     server = smtplib.SMTP('smtp.gmail.com:587')
+    server.ehlo()
     server.starttls()
     server.login(username, password)
+    subject = "New Listing @ Capital Pacific: " + "\n"
 
     for item in newProperties:
-        fullMessage = "\nNew Listing @ Capital Pacific: " + "\n"
-        fullMessage += "Title: " + str(item['title']) + "\n"
-        fullMessage += "Location: " + str(item['location']) + "\n"
-        fullMessage += "Contact Email: " + str(item['contact']) + "\n"
-        server.sendmail(fromaddr, toaddrs, fullMessage)
+        body = "Title: " + str(item['title']) + "\n"
+        body += "Location: " + str(item['location']) + "\n"
+        body += "URL: " + str(item['marketing_package_url']) + "\n"
+        body += "Contact Email: " + str(item['contact']) + "\n"
+        msg = """\From: %s\nTo: %s\nSubject: %s\n\n%s
+        """ % (fromaddr, ", ".join(toaddrs), subject, body)
+        server.sendmail(fromaddr, toaddrs, msg)
         collection.insert(item)
 
-    server.quit()
-
+    server.close()
 
