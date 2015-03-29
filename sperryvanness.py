@@ -73,13 +73,13 @@ else:
 	subject = "New Listing @ Sperry Van Ness"
 
 	for item in newProperties:
-		body += "Title: " + str(item['title']) + "\n"
+		body = "Title: " + str(item['title']) + "\n"
 		body += "Location: " + str(item['location']) + "\n"
 		body += "URL: " + str(item['url']) + "\n"
 		body += "Contact Email: " + str(item['contact']) + "\n"
-        msg = """\From: %s\nTo: %s\nSubject: %s\n\n%s
-        """ % (fromaddr, ", ".join(toaddrs), subject, body)
-        server.sendmail(fromaddr, toaddrs, msg)
+		msg = """\From: %s\nTo: %s\nSubject: %s\n\n%s
+		""" % (fromaddr, ", ".join(toaddrs), subject, body)
+		server.sendmail(fromaddr, toaddrs, msg)
 		collection.insert(item)
 
 	server.close()
