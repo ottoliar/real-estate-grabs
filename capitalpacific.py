@@ -55,7 +55,7 @@ else:
     with open('passwords.txt') as inFile:
         password = inFile.read()
     fromaddr = 'ottoliarobert@gmail.com'
-    toaddrs = ['ottoliar@onid.oregonstate.edu']
+    toaddrs = ['andy.ottolia@gmail.com']
     username = 'ottoliarobert@gmail.com'
     server = smtplib.SMTP('smtp.gmail.com:587')
     server.ehlo()
