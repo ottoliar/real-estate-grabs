@@ -61,8 +61,8 @@ else:
     server.ehlo()
     server.starttls()
     server.login(username, password)
-    subject = "New Listing @ Capital Pacific: " + "\n"
-
+    subject = "New Listing @ Capital Pacific"
+    
     for item in newProperties:
         body = "Title: " + str(item['title']) + "\n"
         body += "Location: " + str(item['location']) + "\n"
