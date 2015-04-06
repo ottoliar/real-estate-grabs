@@ -51,7 +51,7 @@ if collection.count != 0:
 
 	for oldListing in oldProperties:
 		for newListing in newProperties:
-			if oldListing['title'] == newListing['title']:
+			if oldListing['url'] == newListing['url']:
 				newProperties.remove(newListing)
 
 
