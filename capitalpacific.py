@@ -16,6 +16,8 @@ oldProperties = []
 newProperties = []
 
 driver = webdriver.Firefox()
+
+#go to the website
 driver.get("http://cp.capitalpacific.com/Properties")
 
 for property in driver.find_elements_by_css_selector('table.property div.property'):
@@ -54,9 +56,9 @@ if len(newProperties) == 0:
 else:
     with open('passwords.txt') as inFile:
         password = inFile.read()
-    fromaddr = 'ottoliarobert@gmail.com'
+    fromaddr = 'commercialinvestorsofus@gmail.com'
     toaddrs = ['andy.ottolia@gmail.com']
-    username = 'ottoliarobert@gmail.com'
+    username = 'commercialinvestorsofus@gmail.com'
     server = smtplib.SMTP('smtp.gmail.com:587')
     server.ehlo()
     server.starttls()
