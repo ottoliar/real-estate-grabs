@@ -18,9 +18,11 @@ driver.get("http://smicre.com/category/current-properties/properties-for-sale/")
 
 for property in driver.find_elements_by_class_name('search-content-image'):
 	URL = property.get_attribute('href')
+	title = property.get_attribute('title')
 
 	newProperties.append({
-		'URL': URL
+		'URL': URL,
+		'title': title
 		})
 
 driver.close()
@@ -44,7 +46,6 @@ else:
 	username = fromaddr
 	subject = "New Listing @ SMI Commercial Real Estate"
 	server = smtplib.SMTP('smtp.gmail.com', 587)
-	server.set_debuglevel(1)
 	server.ehlo()
 	server.starttls()
 	server.login(username, password)
@@ -52,8 +53,9 @@ else:
 	for item in newProperties:
 		msg = ("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" 
 			% (fromaddr, ", ".join(toaddrs), subject) )
-		msg += "\nURL: " + str(item['URL'])
-		server.sendmail(fromaddr, toaddrs, msg)
+		msg += item['title'] + "\n"
+		msg += item['URL']
+		server.sendmail(fromaddr, toaddrs, msg.encode('utf-8'))
 		collection.insert(item)
 
 server.quit()
