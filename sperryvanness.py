@@ -19,7 +19,7 @@ newProperties = []
 
 driver = webdriver.Firefox()
 #go to the website
-driver.get('http://svncommercialadvisors.com/properties/')
+driver.get('http://www.svnbluestone.com/search-properties/')
 
 # wait for frame to load
 frame = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "div#buildout iframe")))
@@ -65,13 +65,13 @@ else:
 	with open('passwords.txt') as inFile:
 		password = inFile.read()
 	fromaddr = 'commercialinvestorsofus@gmail.com'
-	toaddrs = ['andy.ottolia@gmail.com']
+	toaddrs = ['andy.ottolia@svn.com']
 	username = 'commercialinvestorsofus@gmail.com'
 	server = smtplib.SMTP('smtp.gmail.com:587')
 	server.ehlo()
 	server.starttls()
 	server.login(username, password)
-	subject = "New Listing @ Sperry Van Ness"
+	subject = "New Listing @ Sperry Van Ness BlueStone"
 
 	for item in newProperties:
 		body = "Title: " + str(item['title']) + "\n"
