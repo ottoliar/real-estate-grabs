@@ -37,7 +37,7 @@ for property in driver.find_elements_by_class_name('propertyListItem'):
 	newProperties.append({
 		'title': title.text,
 		'location': location.text,
-		'url': url,
+		'URL': url,
 		'contact': contact
 		})
 
@@ -52,9 +52,8 @@ if collection.count != 0:
 
 	for oldListing in oldProperties:
 		for newListing in newProperties:
-			if oldListing['url'] == newListing['url']:
+			if oldListing['URL'] == newListing['URL']:
 				newProperties.remove(newListing)
-
 
 '''if no new listings, exit the program.  Otherwise, email all new 
 listings and then insert them into the DB'''
@@ -76,7 +75,7 @@ else:
 	for item in newProperties:
 		body = "Title: " + str(item['title']) + "\n"
 		body += "Location: " + str(item['location']) + "\n"
-		body += "URL: " + str(item['url']) + "\n"
+		body += "URL: " + str(item['URL']) + "\n"
 		body += "Contact Email: " + str(item['contact']) + "\n"
 		msg = """\From: %s\nTo: %s\nSubject: %s\n\n%s
 		""" % (fromaddr, ", ".join(toaddrs), subject, body)
