@@ -3,6 +3,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 import pymongo
 import sys
 import smtplib
+import re
 
 from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
@@ -29,11 +30,12 @@ for property in driver.find_elements_by_class_name("featured-results-listing"):
 			city = data.text
 		else:
 			continue
-
+	stringSplit = re.findall(r"\'(.*?)\'", URL)
+	URL_complete = "willamettevalleyidx.com/" + stringSplit[0]
 	newProperties.append({
-		'URL: ': URL,
-		'Price: ': price,
-		'City: ': city
+		'URL': URL_complete,
+		'Price': price,
+		'City': city
 		})
 
 driver.close()
