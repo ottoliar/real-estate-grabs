@@ -19,12 +19,13 @@ def extractData(webElement, propertyList):
 	return
 
 from pymongo import MongoClient
-client = MongoClient('localhost', 27017)
+with open('uri.txt') as URI_file:
+	uri = URI_file.read()
+client = MongoClient(uri)
 
 db = client.properties
 collection = db['cbre']
 
-oldProperties = []
 newProperties = []
 
 driver = webdriver.Firefox()
@@ -56,14 +57,9 @@ for listing in driver.find_elements_by_css_selector("tr[class='llRD-record']"):
 driver.close()
 
 # Send newly found properties before inserting into the Database
-if collection.count != 0:
-	for post in collection.find():
-		oldProperties.append(post)
-
-	for oldListing in oldProperties:
-		for newListing in newProperties:
-			if oldListing['URL'] == newListing['URL']:
-				newProperties.remove(newListing)
+for newListing in newProperties:
+	if collection.find({'URL':newListing['URL']}).count > 0:
+		newProperties.remove(newListing)
 
 if len(newProperties) == 0:
 	sys.exit()

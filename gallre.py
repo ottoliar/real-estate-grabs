@@ -6,12 +6,13 @@ import smtplib
 import re
 
 from pymongo import MongoClient
-client = MongoClient('localhost', 27017)
+with open('uri.txt') as URI_file:
+    uri = URI_file.read()
+client = MongoClient(uri)
 
 db = client.properties
 collection = db['gallre']
 
-oldProperties = []
 newProperties = []
 
 driver = webdriver.Firefox()
@@ -40,14 +41,9 @@ for property in driver.find_elements_by_class_name("featured-results-listing"):
 
 driver.close()
 
-if collection.count != 0:
-	for post in collection.find():
-		oldProperties.append(post)
-
-	for oldListing in oldProperties:
-		for newListing in newProperties:
-			if oldListing['URL'] == newListing['URL']:
-				newProperties.remove(newListing)
+for newListing in newProperties:
+    if collection.find({'URL':newListing['URL']}).count > 0:
+        newProperties.remove(newListing)
 
 if len(newProperties) == 0:
 	sys.exit()

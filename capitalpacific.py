@@ -5,7 +5,9 @@ import smtplib
 import sys
 
 from pymongo import MongoClient
-client = MongoClient('localhost', 27017)
+with open('uri.txt') as URI_file:
+    uri = URI_file.read()
+client = MongoClient(uri)
 
 db = client.properties
 collection = db['capitalpacific']
@@ -39,14 +41,9 @@ driver.close()
 '''if database not empty, add the old properties,
 then compare against the newly fetched and remove repeats'''
 
-if collection.count() != 0:
-    for post in collection.find():
-        oldProperties.append(post)
-
-    for oldListing in oldProperties:
-        for newListing in newProperties:
-            if oldListing['marketing_package_url'] == newListing['marketing_package_url']:
-                newProperties.remove(newListing)
+for newListing in newProperties:
+    if collection.find({'marketing_package_url':newListing['marketing_package_url']}).count > 0:
+        newProperties.remove(newListing)
 
 '''if no new listings, exit the program.  Otherwise, email all new 
 listings and then insert them into the database'''
