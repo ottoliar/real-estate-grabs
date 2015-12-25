@@ -57,6 +57,8 @@ for listing in driver.find_elements_by_css_selector("tr[class='llRD-record']"):
 driver.close()
 
 # Send newly found properties before inserting into the Database
+newProperties = [newListing for newListing in newProperties if collection.find({ 'URL': newListing['URL'] }).count > 0]
+
 for newListing in newProperties:
 	if collection.find({'URL':newListing['URL']}).count > 0:
 		newProperties.remove(newListing)
