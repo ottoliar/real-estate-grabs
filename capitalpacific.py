@@ -41,7 +41,7 @@ driver.close()
 '''if database not empty, add the old properties,
 then compare against the newly fetched and remove repeats'''
 
-newProperties = [newListing for newListing in newProperties if collection.find({ 'marketing_package_url': newListing['marketing_package_url' ]} ).count > 0];
+newProperties = [newListing for newListing in newProperties if collection.find({ 'marketing_package_url': newListing['marketing_package_url' ]} ).count > 0]
 
 '''if no new listings, exit the program.  Otherwise, email all new 
 listings and then insert them into the database'''
