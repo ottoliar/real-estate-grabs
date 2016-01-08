@@ -59,10 +59,6 @@ driver.close()
 # Send newly found properties before inserting into the Database
 newProperties = [newListing for newListing in newProperties if collection.find({ 'URL': newListing['URL'] }).count > 0]
 
-for newListing in newProperties:
-	if collection.find({'URL':newListing['URL']}).count > 0:
-		newProperties.remove(newListing)
-
 if len(newProperties) == 0:
 	sys.exit()
 else:
